@@ -31,6 +31,7 @@ public class ConcatAndStoreInMysql {
                 functions.concat(df.col("lname"), functions.lit(", "), df.col("fname")));
 
         df.show();
+        df.printSchema();
         String dbConnectionUrl = "jdbc:postgresql://localhost/test";
         Properties prop = new Properties();
         prop.setProperty("driver", "org.postgresql.Driver");
