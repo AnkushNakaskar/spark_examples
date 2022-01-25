@@ -3,6 +3,12 @@ package org.example;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * CSV ingestion in a dataframe.
@@ -31,14 +37,29 @@ public class CsvToDataframeApp {
         .master("local")
         .getOrCreate();
 
+    String schemaString = "id,authorId,title,releaseDate,link";
+
+    // Generate the schema based on the string of schema
+    List<StructField> fields = new ArrayList<>();
+    for (String fieldName : schemaString.split(",")) {
+      StructField field = DataTypes.createStructField(fieldName, DataTypes.StringType, true);
+      fields.add(field);
+    }
+    StructType schema = DataTypes.createStructType(fields);
+
+
     // Reads a CSV file with header, called books.csv, stores it in a
     // dataframe
+    //Assigning the values in schema(Strict way)
     Dataset<Row> df = spark.read().format("csv")
         .option("header", "true")
+            .schema(schema)
         .load("data/books.csv");
 
     // Shows at most 5 rows from the dataframe
     df.show();
+    df.printSchema();
+
     try {
       Thread.sleep(35000);
     } catch (InterruptedException e) {
