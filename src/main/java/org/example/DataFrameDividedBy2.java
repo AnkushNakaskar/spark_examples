@@ -7,6 +7,7 @@ import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +40,18 @@ public class DataFrameDividedBy2 {
                 .toDF();
         incrementalDf.show(100);
         incrementalDf.printSchema();
-        incrementalDf.filter((FilterFunction<Row>) row -> row.getInt(0)%2==0).show(5);
+//        incrementalDf.filter((FilterFunction<Row>) row -> row.getInt(0)%2==0).show(5);
+        incrementalDf.filter(new EvenNumberFilter()).show(5);
 
+    }
+
+    static  class EvenNumberFilter implements  FilterFunction<Row> {
+        private static final long serialVersionUID=1L;
+
+        @Override
+        public boolean call(Row row) throws Exception {
+            int input = row.getInt(0);
+            return input%2==0;
+        }
     }
 }
