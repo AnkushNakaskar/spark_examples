@@ -59,6 +59,8 @@ public class CsvToDataframeApp {
     // Shows at most 5 rows from the dataframe
     df.show();
     df.printSchema();
+    Row[] take = (Row[]) df.take(5); // this is same like prediction of schema if not specified in read/load method
+    System.out.println(take);
 
     try {
       Thread.sleep(35000);
