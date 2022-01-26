@@ -51,7 +51,7 @@ public class FileStreaming {
         rawData.createOrReplaceTempView("empData");
 //count of employees grouping by department
 
-        Dataset<Row> result = spark.sql("select count(*), department from  empData group by department");
+        Dataset<Row> result = spark.sql("select count(*), authorId from  empData group by authorId");
 
 
         //write stream to output console with update mode as data is being aggregated
