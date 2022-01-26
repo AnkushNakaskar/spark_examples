@@ -43,9 +43,14 @@ public class RetailStreamExample {
         Dataset<Row> rawData2 = rawData.selectExpr("CustomerId",
                 "(UnitPrice * Quantity) as total_cost", "InvoiceDate").groupBy("CustomerId").sum("total_cost");
 
+        Dataset<Row> rawData3 = rawData.selectExpr("CustomerId",
+                "(UnitPrice * Quantity) as total_cost", "InvoiceDate").groupBy("CustomerId").count();
+
 //        rawData2.show(50);
 //        rawData.writeStream().format("console").queryName("customer_purchases_2").outputMode("complete").start();
-        StreamingQuery query = rawData2.writeStream().outputMode(OutputMode.Update()).format("console").queryName("customer_purchases_2").start();
+//        StreamingQuery query = rawData2.writeStream().outputMode(OutputMode.Update()).format("console").queryName("customer_purchases_2").start();
+        //complete mode is only supported in aggregated types, like in rawData3 has count, hence its completed
+        StreamingQuery query = rawData3.writeStream().outputMode(OutputMode.Complete()).format("console").queryName("customer_purchases_2").start();
 
         query.awaitTermination();
 
