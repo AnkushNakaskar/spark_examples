@@ -17,7 +17,9 @@ It may happen that a Spark application can also be a YARN application. In such c
 
 ```
 What qualifies as a small job? By default, a small job is one that has less than 10 mappers, only one reducer, 
-and an input size that is less than the size of one HDFS block. (Note that these values may be changed for a job by setting mapreduce.job.ubertask.maxmaps, mapreduce.job.ubertask.maxreduces, and mapreduce.job.ubertask.maxbytes.) 
+and an input size that is less than the size of one HDFS block. 
+(Note that these values may be changed for a job by setting mapreduce.job.ubertask.maxmaps, mapreduce.job.ubertask.maxreduces, 
+and mapreduce.job.ubertask.maxbytes.) 
 Uber tasks must be enabled explicitly (for an individual job, or across the cluster) by setting mapreduce.job.ubertask.enable to true.
 
 ```
