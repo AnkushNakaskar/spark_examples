@@ -7,4 +7,6 @@ This project explain  the spark from scratch, follow every main class in java pa
 * Question on how file get loaded with limited resource on RDD
   * https://stackoverflow.com/questions/55429266/will-spark-load-data-into-in-memory-if-data-is-10-gb-and-ram-is-1gb?rq=1
   * https://stackoverflow.com/questions/55488204/how-spark-loads-the-data-into-memory
+ 
+* Frequst ask questions on Spark [spark_faq](Spark_FAQ.md) 
 
