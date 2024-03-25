@@ -9,7 +9,7 @@
      Spark condenses as many operations together as possible, 
      and does not materialize anything unnecessary or that hasn't been explicitly requested to be saved or cached. 
      ```
- * When to use repartion ?
+ * When to use repartition ?
    * ``` 
      If you know that you’re going to be filtering by a certain column often, 
      it can be worth repartitioning based on that column: 
