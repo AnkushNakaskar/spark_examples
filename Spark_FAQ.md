@@ -31,3 +31,15 @@
        dropMalformed -> Dropstherowthatcontainsmalformedrecords
        failFast      -> Fails immediately upon encountering malformed records
      ```
+   * CSV reader has various issues solve like : commas inside of columns when the file is also comma-delimited
+   * ```
+      val df2 = spark.read
+               .format("csv")
+               .option("header", "true")
+               .option("escapeQuotes", "true")
+               .load("/FileStore/tables/emp_data_2_with_quotes.txt")
+     
+      While reading the file in options, we mentioned option("escapeQuotes", "true"); 
+      due to this comma within the double quotes will be ignored and the content within the quotes treated as a single value.
+     
+     ```
