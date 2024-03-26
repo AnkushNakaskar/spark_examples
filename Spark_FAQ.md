@@ -23,3 +23,11 @@
        Spark can avoid the shuffle. Experiment with some of your data and try partitioning beforehand to see 
        if you can notice the increase in speed when performing those joins
        ```
+ * How reading the dataset has various approaches ?
+   * Read modes specify what will happen when Spark does come across malformed records
+   * ```
+       Read mode Description 
+       permissive    -> Sets all fields to null when it encounters a corrupted record and places all corrupted records in a string column called _corrupt_record
+       dropMalformed -> Dropstherowthatcontainsmalformedrecords
+       failFast      -> Fails immediately upon encountering malformed records
+     ```
