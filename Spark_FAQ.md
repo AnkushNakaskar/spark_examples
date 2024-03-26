@@ -9,9 +9,17 @@
      Spark condenses as many operations together as possible, 
      and does not materialize anything unnecessary or that hasn't been explicitly requested to be saved or cached. 
      ```
- * When to use repartition ?
+ * When to use repartion ?
    * ``` 
      If you know that you’re going to be filtering by a certain column often, 
      it can be worth repartitioning based on that column: 
      df.repartition(5, col("DEST_COUNTRY_NAME"))
      ```
+   * How Repartition help in join performance ?
+     * ``` 
+       if you partition your data correctly prior to a join, 
+       you can end up with much more efficient execution because even if a shuffle is planned, 
+       if data from two different DataFrames is already located on the same machine, 
+       Spark can avoid the shuffle. Experiment with some of your data and try partitioning beforehand to see 
+       if you can notice the increase in speed when performing those joins
+       ```
