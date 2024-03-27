@@ -1,39 +1,35 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        Pattern pattern = Pattern.compile("[']*[0-9].*");
-        String input ="'407084330414";
-        Matcher matcher = pattern.matcher(input);
-        List<String> matches = new ArrayList<>();
-        while (matcher.find()) {
-            matches.add(matcher.group());
-        }
-        System.out.println(matches);
-        String value = input.replace("\'", " ");
-        System.out.println(value);
+        final List<String> strings = Arrays.asList("Owl", "Parrot", "Crow", "Ibis", "WoodPecker",
+                "Bulbul", "Falcon",
+                "Eagle", "Kite", "Toucan");
 
-    checkString();
+        Map<Integer,List<String>> hascodemap =new HashMap<>();
+        for(String val : strings){
+            int index = val.length()%4;
+            List<String> listOfValues = hascodemap.getOrDefault(index, new ArrayList<>());
+            listOfValues.add(val);
+            hascodemap.put(index,listOfValues);
+        }
+        System.out.println(hascodemap);
+//        {0=[Owl, Bulbul, Eagle], -1=[WoodPecker], -2=[Parrot, Toucan], 1=[Falcon], 3=[Crow, Ibis, Kite]}
+
+
+        hascodemap =new HashMap<>();
+        for(String val : strings){
+            int index = val.length()%8;
+            System.out.println(index);
+            List<String> listOfValues = hascodemap.getOrDefault(index, new ArrayList<>());
+            listOfValues.add(val);
+            hascodemap.put(index,listOfValues);
+        }
+        System.out.println(hascodemap);
 
     }
-
-    private static void checkString() {
-
-        Pattern pattern = Pattern.compile("w3schools");
-        String input ="Visit w3schools!";
-        Matcher matcher = pattern.matcher(input);
-        List<String> matches = new ArrayList<>();
-        while (matcher.find()) {
-            matches.add(matcher.group());
-        }
-        System.out.println(matches);
-    }
-
 
 }
