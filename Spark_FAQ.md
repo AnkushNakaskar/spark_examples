@@ -1,4 +1,5 @@
-# FAQ on spark
+# FAQ on spark 
+ * Partions is only way to handle parallelization in spark : https://luminousmen.com/post/spark-partitions
  * Since Dataframe are immutable , wouldnt it add more data(redundancy) ?
    * ```
      The difference is essentially laziness. Each new DataFrame that is returned is not materialized in memory. 
