@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.spark.sql.functions.col;
+//Read about partitions  : https://luminousmen.com/post/spark-partitions
+
 
 public class SparkPartitionsInDetails {
 
