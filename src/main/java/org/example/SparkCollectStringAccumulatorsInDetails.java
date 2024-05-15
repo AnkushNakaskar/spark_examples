@@ -63,6 +63,5 @@ public class SparkCollectStringAccumulatorsInDetails {
         }
         System.out.println(">>>> : "+accEven.count());
         System.out.println(">>>> : "+stringCollectionAccumulator.value());
-
     }
 }
