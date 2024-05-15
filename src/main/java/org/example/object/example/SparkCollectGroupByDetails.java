@@ -18,6 +18,7 @@ import java.util.List;
         -> 1-100 : data is divided into 10 partition, hence every partition will have 5 even number.
         -> You can refer this : http://localhost:4040/stages/stage/?id=0&attempt=0
         -> at the end you can get the value 50 in total.
+        https://stackoverflow.com/questions/69295448/aggregate-dataset-by-key-and-list-the-rest-of-values
  */
 
 
