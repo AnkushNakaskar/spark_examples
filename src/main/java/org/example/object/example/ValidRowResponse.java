@@ -10,6 +10,22 @@ public class ValidRowResponse implements Serializable {
     private  String content;
     private  String schemaName;
 
+    @Override
+    public String toString() {
+        return "ValidRowResponse{" +
+                "fileId='" + fileId + '\'' +
+                ", key='" + key + '\'' +
+                ", content='" + content + '\'' +
+                ", schemaName='" + schemaName + '\'' +
+                ", fetchedRowData='" + fetchedRowData + '\'' +
+                ", errors=" + errors +
+                '}';
+    }
+
+    public boolean isValid() {
+        return this.errors.isEmpty();
+    }
+
     public String getFileId() {
         return fileId;
     }

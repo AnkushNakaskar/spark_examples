@@ -10,6 +10,16 @@ public class InvalidFileBag implements Serializable {
     private  String fileId;
     private Long totalRows;
 
+    @Override
+    public String toString() {
+        return "InvalidFileBag{" +
+                "fileId='" + fileId + '\'' +
+                ", totalRows=" + totalRows +
+                ", lastReadRow=" + lastReadRow +
+                ", errors=" + errors +
+                '}';
+    }
+
     public Long getTotalRows() {
         return totalRows;
     }
