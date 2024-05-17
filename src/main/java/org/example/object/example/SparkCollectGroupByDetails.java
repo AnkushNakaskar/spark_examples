@@ -186,6 +186,8 @@ public class SparkCollectGroupByDetails {
 
         valuesUpdated.groupBy("fileId").df()
                 .map(new RowToInvalidBagValidationResponseTransformer(), Encoders.bean(InvalidFileBag.class));
+//        https://stackoverflow.com/questions/37580782/pyspark-collect-set-or-collect-list-with-groupby
+//        You can refer agg function for aggregating the values
         InvalidFileBag reducesResult = valuesUpdated.groupBy("fileId").df()
                 .map(new RowToInvalidBagValidationResponseTransformer(), Encoders.bean(InvalidFileBag.class))
 
