@@ -3,9 +3,11 @@ package org.example.object.example;
 import org.apache.spark.api.java.function.FilterFunction;
 import org.apache.spark.api.java.function.ForeachFunction;
 import org.apache.spark.api.java.function.MapFunction;
+import org.apache.spark.api.java.function.ReduceFunction;
 import org.apache.spark.sql.*;
 import org.apache.spark.util.CollectionAccumulator;
 import org.apache.spark.util.LongAccumulator;
+import scala.Tuple2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -156,25 +158,53 @@ public class SparkCollectGroupByDetails {
         for( List<InvalidFileBag> row : rows1){
             System.out.println("Partition Values length222 : "+row);
         }
-        List<InvalidFileBag> values = mappingDF.collectAsList();
-        mappingDF.groupBy("fileId").count().printSchema();
+        List<InvalidFileBag> values = valuesUpdated.collectAsList();
+        valuesUpdated.groupBy("fileId").count().printSchema();
 
 
         System.out.println("!!!...Ankush...!!!");
         System.out.println(values);
 
         System.out.println("!!!...Ankush...!!!");
-        List<FileIdInvalidRowCountMapResponse> countList = mappingDF.groupBy("fileId").count()
+        List<FileIdInvalidRowCountMapResponse> countList = valuesUpdated.groupBy("fileId").count()
                 .map(new RowToMapOfCountResponseTransformer(), Encoders.bean(FileIdInvalidRowCountMapResponse.class))
                 .collectAsList();
         System.out.println(countList);
         Map<String, List<FileIdInvalidRowCountMapResponse>> mapOfFileIDCount = countList.stream().collect(Collectors.groupingBy(FileIdInvalidRowCountMapResponse::getFileId));
         System.out.println(mapOfFileIDCount);
+//        valuesUpdated.groupBy("fileId").df().reduce()
 
+        System.out.println("!!!.......Ankush.........!!!");
+        valuesUpdated.groupBy("fileId").df().printSchema();
+
+        List<InvalidFileBag> collectListValue = valuesUpdated.groupBy("fileId").df()
+                .map(new RowToInvalidBagValidationResponseTransformer(), Encoders.bean(InvalidFileBag.class)).collectAsList();
+        System.out.println("!!!.......Ankush.........!!!");
+        System.out.println(collectListValue);
+//        valuesUpdated.groupBy("fileId")
+
+
+        valuesUpdated.groupBy("fileId").df()
+                .map(new RowToInvalidBagValidationResponseTransformer(), Encoders.bean(InvalidFileBag.class));
+        InvalidFileBag reducesResult = valuesUpdated.groupBy("fileId").df()
+                .map(new RowToInvalidBagValidationResponseTransformer(), Encoders.bean(InvalidFileBag.class))
+
+                .reduce((ReduceFunction<InvalidFileBag>) (invalidFileBag, t1) -> {
+                    System.out.println("Values are :: "+ invalidFileBag);
+                    InvalidFileBag target = new InvalidFileBag();
+                    target.setFileId(invalidFileBag.getFileId());
+                    target.setTotalRows(invalidFileBag.getTotalRows() + 1);
+                    Map<String, List<FailedValidationMessage>> mapError = new HashMap<>(invalidFileBag.getErrors());
+                    mapError.putAll(t1.getErrors());
+                    target.setErrors(mapError);
+                    return target;
+                });
 
 
 //        invalidFileBagDf.printSchema();
 //        invalidFileBagDf.show();
+        System.out.println("!!!.......Ankush.........!!!");
+        System.out.println(reducesResult);
         System.out.println("!!!.......Ankush.........!!!");
 
 

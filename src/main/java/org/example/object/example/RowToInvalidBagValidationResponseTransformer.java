@@ -8,13 +8,10 @@ import scala.collection.mutable.WrappedArray;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class RowToInvalidBagValidationResponseTransformer implements MapFunction<Row, ValidRowResponse>, Serializable {
+public class RowToInvalidBagValidationResponseTransformer implements MapFunction<Row, InvalidFileBag>, Serializable {
 
     public static final String ROW = "row";
     public final String ID = "fileId";
@@ -27,17 +24,26 @@ public class RowToInvalidBagValidationResponseTransformer implements MapFunction
     public static final String REASON = "reason";
 
     @Override
-    public ValidRowResponse call(Row row) {
+    public InvalidFileBag call(Row row) {
 //        final Map<String, String> rowMap = this.getStringStringMap(row, ROW);
-        ValidRowResponse validRowResponse =new ValidRowResponse();
-        validRowResponse.setContent(row.getAs("content"));
-        validRowResponse.setFileId(row.getAs(ID));
-        validRowResponse.setKey(row.getAs(KEY));
-        validRowResponse.setErrors( Arrays.stream((this.toArray(row.getAs(ERRORS))))
-                .map(GenericRowWithSchema.class::cast)
-                .map(this::convertToFailedValidationMessage)
-                .collect(Collectors.toList()));
-        return validRowResponse;
+        InvalidFileBag invalidFileBag =new InvalidFileBag();
+        invalidFileBag.setFileId(row.getAs(ID));
+        invalidFileBag.setTotalRows(row.getAs("totalRows"));
+        Map<Object, Object> currentBuffer = JavaConverters.mapAsJavaMapConverter(row.getAs("errors")).asJava();
+        Map<String, List<FailedValidationMessage>> mapError =new HashMap<>();
+        invalidFileBag.setErrors(mapError);
+        currentBuffer.forEach((key,value) ->{
+            String mapKey = String.valueOf(key);
+            List<FailedValidationMessage> valuesList1 = Arrays.stream((RowToInvalidBagValidationResponseTransformer.toArray(value)))
+                    .map(GenericRowWithSchema.class::cast)
+                    .map(this::convertToFailedValidationMessage)
+                    .collect(Collectors.toList());
+           mapError.put(mapKey,valuesList1);
+
+        });
+
+//        invalidFileBag.setErrors(currentBuffer);
+        return invalidFileBag;
     }
 
     @NotNull

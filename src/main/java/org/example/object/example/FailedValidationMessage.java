@@ -7,6 +7,15 @@ public class FailedValidationMessage implements Serializable {
     private  String value;
     private  String reason;
 
+    @Override
+    public String toString() {
+        return "FailedValidationMessage{" +
+                "field='" + field + '\'' +
+                ", value='" + value + '\'' +
+                ", reason='" + reason + '\'' +
+                '}';
+    }
+
     public String getField() {
         return field;
     }

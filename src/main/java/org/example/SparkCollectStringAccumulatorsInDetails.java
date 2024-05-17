@@ -57,7 +57,7 @@ public class SparkCollectStringAccumulatorsInDetails {
             }
         });
         try {
-            Thread.sleep(4000);
+            Thread.sleep(8000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
