@@ -1,10 +1,15 @@
 package org.example;
 
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.util.AccumulatorContext;
+import org.apache.spark.util.AccumulatorV2;
+import org.apache.spark.util.CollectionAccumulator;
 import org.apache.spark.util.LongAccumulator;
+import scala.Option;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +31,14 @@ public class SparkAccumulatorsInDetails {
     }
     public void start() {
         int numberOfThrows = 100;
-        LongAccumulator accEven = new LongAccumulator();
+//        LongAccumulator accEven = new LongAccumulator();
         SparkSession spark = SparkSession
                 .builder()
                 .appName("Spark Pi")
                 .master("local[*]")
                 .getOrCreate();
-        spark.sparkContext().register(accEven,"evenNumber");
+        LongAccumulator accEven =spark.sparkContext().longAccumulator("evenNumber");
+//        spark.sparkContext().register(accEven,"evenNumber");
         List<Integer> list = new ArrayList<>(numberOfThrows);
         for (int i = 0; i < numberOfThrows; i++) {
             list.add(i);
@@ -50,11 +56,17 @@ public class SparkAccumulatorsInDetails {
             }
         });
         try {
-            Thread.sleep(400000);
+            Thread.sleep(4000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+
         System.out.println(">>>> : "+accEven.count());
+        LongAccumulator newVal = spark.sparkContext().longAccumulator("evenNumber");
+        Option<AccumulatorV2<?, ?>> newVal1 = AccumulatorContext.get(0);
+        int val1 = AccumulatorContext.numAccums();
+        System.out.println("Size  val  is  : "+newVal1 + "val1" + val1);
 
     }
 }
