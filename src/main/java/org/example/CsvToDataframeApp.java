@@ -37,15 +37,7 @@ public class CsvToDataframeApp {
         .master("local")
         .getOrCreate();
 
-    String schemaString = "id,authorId,title,releaseDate,link";
-
-    // Generate the schema based on the string of schema
-    List<StructField> fields = new ArrayList<>();
-    for (String fieldName : schemaString.split(",")) {
-      StructField field = DataTypes.createStructField(fieldName, DataTypes.StringType, true);
-      fields.add(field);
-    }
-    StructType schema = DataTypes.createStructType(fields);
+    StructType schema = getSchema();
 
 
     // Reads a CSV file with header, called books.csv, stores it in a
@@ -53,7 +45,10 @@ public class CsvToDataframeApp {
     //Assigning the values in schema(Strict way)
     Dataset<Row> df = spark.read().format("csv")
         .option("header", "true")
+            .option("skipRows", 1) // # Skip the specified number of rows after header
+
             .schema(schema)
+
         .load("data/books.csv");
 
     // Shows at most 5 rows from the dataframe
@@ -67,5 +62,17 @@ public class CsvToDataframeApp {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
+  }
+
+  private StructType getSchema() {
+    String schemaString = "id,authorId,title,releaseDate,link";
+    // Generate the schema based on the string of schema
+    List<StructField> fields = new ArrayList<>();
+    for (String fieldName : schemaString.split(",")) {
+      StructField field = DataTypes.createStructField(fieldName, DataTypes.StringType, true);
+      fields.add(field);
+    }
+    StructType schema = DataTypes.createStructType(fields);
+    return schema;
   }
 }
