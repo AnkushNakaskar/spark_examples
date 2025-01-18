@@ -7,6 +7,7 @@ import org.apache.spark.sql.types.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,7 +26,16 @@ public class SchemaExercise {
 
         StructType companySchema = new StructType()
                 .add("name", DataTypes.StringType)
-                .add("age", DataTypes.IntegerType);
+                .add("age", DataTypes.IntegerType)
+                .add("marks",DataTypes.createArrayType(DataTypes.StringType,false))
+                ;
+
+//        StructType schema = new StructType(new StructField[]{
+//                new StructField("persons",
+//                        DataTypes.createArrayType(companySchema), false,
+//                        Metadata.empty())
+//        });
+
 
 
 
@@ -42,11 +52,11 @@ public class SchemaExercise {
     private static String getJsonString() throws JsonProcessingException {
         ObjectMapper mapper =new ObjectMapper();
         List<Person> personList =new ArrayList<>();
-        personList.add(new Person("Ankush",21));
-        personList.add(new Person("Ankush1",22));
-        personList.add(new Person("Ankush2",23));
-        personList.add(new Person("Ankush3",24));
-        personList.add(new Person("Ankush4",25));
+        personList.add(new Person("Ankush",21, Arrays.asList(1,2,3)));
+        personList.add(new Person("Ankush1",22, Arrays.asList(1,2,3)));
+        personList.add(new Person("Ankush2",23, Arrays.asList(1,2,3)));
+        personList.add(new Person("Ankush3",24, Arrays.asList(1,2,3)));
+        personList.add(new Person("Ankush4",25, Arrays.asList(1,2,3)));
         String result = mapper.writeValueAsString(personList);
         return result;
     }
@@ -54,9 +64,12 @@ public class SchemaExercise {
         private String name;
         private Integer age;
 
-        public Person(String name, Integer age){
+        private List<Integer> marks;
+
+        public Person(String name, Integer age, List<Integer> marks){
             this.name=name;
             this.age=age;
+            this.marks = marks;
         }
 
         public void setName(String name) {
@@ -75,6 +88,13 @@ public class SchemaExercise {
             return age;
         }
 
+        public List<Integer> getMarks() {
+            return marks;
+        }
+
+        public void setMarks(List<Integer> marks) {
+            this.marks = marks;
+        }
     }
 
     private static StructType getSchema() {
