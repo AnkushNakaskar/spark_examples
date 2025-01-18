@@ -21,23 +21,14 @@ public class SchemaExercise {
                 .appName("Ankush Sample application")
                 .master("local")
                 .getOrCreate();
-//
 
+        //Check the person.json file and contains of list which belong to person class, also check for array of integers
 
         StructType companySchema = new StructType()
                 .add("name", DataTypes.StringType)
                 .add("age", DataTypes.IntegerType)
                 .add("marks",DataTypes.createArrayType(DataTypes.StringType,false))
                 ;
-
-//        StructType schema = new StructType(new StructField[]{
-//                new StructField("persons",
-//                        DataTypes.createArrayType(companySchema), false,
-//                        Metadata.empty())
-//        });
-
-
-
 
         String jsonString =getJsonString();
        System.out.println(jsonString);
