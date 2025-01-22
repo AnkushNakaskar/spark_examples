@@ -9,20 +9,22 @@ import java.util.List;
  */
 public   class Employee implements Serializable {
     private String name;
-    private BigInteger age;
-    private List<BigInteger> marks;
+    private Integer age;
 
-    public Employee(String name, BigInteger age, List<BigInteger> marks){
+    public Employee(){
+
+    }
+
+    public Employee(String name, Integer age){
         this.name=name;
         this.age=age;
-        this.marks = marks;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setAge(BigInteger age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -30,15 +32,8 @@ public   class Employee implements Serializable {
         return name;
     }
 
-    public BigInteger getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public List<BigInteger> getMarks() {
-        return marks;
-    }
-
-    public void setMarks(List<BigInteger> marks) {
-        this.marks = marks;
-    }
 }
