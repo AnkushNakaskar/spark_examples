@@ -3,9 +3,9 @@ package org.example;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.spark.sql.*;
-import org.apache.spark.sql.types.*;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructType;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,8 +34,14 @@ public class SchemaExercise {
        System.out.println(jsonString);
 //       Exception in thread "main" org.apache.spark.sql.AnalysisException: Path does not exist: file:/Users/ankush.nakaskar/Office/newCode/spark_examples/person.json
         Dataset<Row> df = spark.read().schema(companySchema).json("./data/person.json").toDF();
-//        df.show();
-        df.show(10);
+        df.show(5);
+//        TypeTags.TypeTagImpl<Person> value12 = new TypeTags.TypeTagImpl<Person>();
+
+        Encoder<Person> employeeEncoder = Encoders.bean(Person.class);
+        Dataset<Person> ds = spark.read().json("./data/person.json").as(employeeEncoder);
+
+        ds.show(5);
+
 
 
     }
@@ -51,52 +57,5 @@ public class SchemaExercise {
         String result = mapper.writeValueAsString(personList);
         return result;
     }
-    static class Person implements Serializable {
-        private String name;
-        private Integer age;
 
-        private List<Integer> marks;
-
-        public Person(String name, Integer age, List<Integer> marks){
-            this.name=name;
-            this.age=age;
-            this.marks = marks;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public void setAge(Integer age) {
-            this.age = age;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public Integer getAge() {
-            return age;
-        }
-
-        public List<Integer> getMarks() {
-            return marks;
-        }
-
-        public void setMarks(List<Integer> marks) {
-            this.marks = marks;
-        }
-    }
-
-    private static StructType getSchema() {
-        String schemaString = "name,age";
-        // Generate the schema based on the string of schema
-        List<StructField> fields = new ArrayList<>();
-        for (String fieldName : schemaString.split(",")) {
-            StructField field = DataTypes.createStructField(fieldName, DataTypes.StringType, true);
-            fields.add(field);
-        }
-        StructType schema = DataTypes.createStructType(fields);
-        return schema;
-    }
 }
