@@ -22,7 +22,6 @@ public class SparkReadJsonRowToObject {
 
         Dataset<Row> dataframe = spark.read().json("./data/employee_object_dataset.json");
         dataframe.show(5);
-//        Dataset<String> ds = dataframe.map(new ObjectToStringMapper(), Encoders.STRING());
         List<Employee> countList = dataframe
                 .map(new RowObjectToEmployeeMapper(), Encoders.bean(Employee.class))
                 .collectAsList();

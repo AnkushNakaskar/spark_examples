@@ -36,4 +36,11 @@ public   class Employee implements Serializable {
         return age;
     }
 
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }
