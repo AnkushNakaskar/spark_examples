@@ -30,6 +30,7 @@ public class SparkColumnExpression {
         result.show(5);
         result = dataframe.withColumnRenamed("age","multiAge");
         result.show(5);
+        result.explain();
         List<Employee> countList = dataframe
                 .collectAsList();
         System.out.println(countList);
